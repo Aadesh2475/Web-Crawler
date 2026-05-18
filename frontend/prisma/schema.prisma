@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  image     String?
+  provider  String   @default("google")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  chats      Chat[]
+  feedback   Feedback[]
+  queryLogs  QueryLog[]
+}
+
+// ── Chat & Messages ───────────────────────────────────────────────────────────
+
+model Chat {
+  id        String   @id @default(cuid())
+  userId    String?
+  title     String
+  model     String   @default("newsler")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  messages Message[]
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  chatId    String
+  role      String
+  content   String
+  model     String?
+  fileNames String[] @default([])
+  sources   Json?    // stores sources array for assistant messages
+  createdAt DateTime @default(now())
+
+  chat     Chat       @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  feedback Feedback[]
+}
+
+// ── Feedback ──────────────────────────────────────────────────────────────────
+
+model Feedback {
+  id        String   @id @default(cuid())
+  messageId String
+  userId    String?
+  value     Int      // 1 = thumbs up, -1 = thumbs down
+  createdAt DateTime @default(now())
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@unique([messageId, userId])
+}
+
+// ── Query Log — stores every user query for analytics ─────────────────────────
+
+model QueryLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  question   String
+  model      String   @default("newsler")
+  fileNames  String[] @default([])
+  answered   Boolean  @default(false)
+  latencyMs  Int?
+  createdAt  DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+}

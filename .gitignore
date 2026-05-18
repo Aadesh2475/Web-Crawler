@@ -1,0 +1,77 @@
+# Git ignore rules for WebMining ML Pipeline and Dashboard
+
+# Environment / secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.env.local
+
+# Frontend specific envs
+frontend/.env
+frontend/.env.local
+frontend/.env.*
+
+# HuggingFace / ML model cache (large files)
+models/
+.cache/
+
+# FAISS index (regenerated from DB)
+data/faiss_index/
+
+# Python compiled / cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Logs
+logs/*.log
+logs/*.log.*
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Next.js build and cache
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/next-env.d.ts
+frontend/*.tsbuildinfo
+
+# Dependencies
+frontend/node_modules/
+node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Databases / Data Caches
+*.db
+*.sqlite
+temp.json
+test_dossier.txt
+
+# OS metadata
+.DS_Store
+Thumbs.db
+

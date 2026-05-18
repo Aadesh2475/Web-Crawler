@@ -1,0 +1,46 @@
+# ============================================================
+# WebMining ML Pipeline — Python Dependencies
+# ============================================================
+
+# ─── Web Crawling ─────────────────────────────────────────────
+requests>=2.31.0
+beautifulsoup4>=4.12.3
+feedparser>=6.0.11
+praw>=7.7.1
+lxml>=5.2.0
+urllib3>=2.2.1
+
+# ─── NLP / ML (CPU-optimized) ────────────────────────────────
+transformers>=4.40.1
+torch>=2.3.0                 # CPU build is automatic if no CUDA
+sentence-transformers>=2.7.0
+accelerate>=0.30.0
+tokenizers>=0.19.1
+
+# ─── Evaluation ──────────────────────────────────────────────
+rouge-score>=0.1.2
+
+# ─── Vector Search ───────────────────────────────────────────
+faiss-cpu>=1.8.0
+
+# ─── Structured Storage ──────────────────────────────────────
+psycopg2-binary>=2.9.9
+sqlalchemy>=2.0.30
+
+# ─── API Layer ───────────────────────────────────────────────
+flask>=3.0.3
+flask-cors>=4.0.1
+
+# ─── Scheduling ──────────────────────────────────────────────
+apscheduler>=3.10.4
+
+# ─── Utilities ───────────────────────────────────────────────
+python-dotenv>=1.0.1
+pyyaml>=6.0.1
+tqdm>=4.66.4
+pandas>=2.2.2
+numpy>=1.26.4
+scikit-learn>=1.4.2
+wikipedia-api>=0.6.0
+yfinance
+psutil>=5.9.0

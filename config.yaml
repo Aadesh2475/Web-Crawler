@@ -1,0 +1,140 @@
+
+# Topics the pipeline will crawl
+topics:
+  - "technology"
+  - "geopolitics"
+  - "finance"
+  - "artificial intelligence"
+  - "politics"
+  - "current affairs"
+  - "climate change"
+  - "space exploration"
+
+# ─── Data Sources ────────────────────────────────────────────
+sources:
+  news:
+    enabled: true
+    api_key: ""           # Set NEWS_API_KEY in .env
+    max_articles_per_topic: 50
+    rss_feeds:
+      - "https://feeds.bbci.co.uk/news/rss.xml"
+      - "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml"
+      - "https://feeds.reuters.com/reuters/topNews"
+      - "https://www.sciencedaily.com/rss/all.xml"
+
+  nytimes:
+    enabled: true
+    api_key: ""
+    max_articles_per_topic: 20
+
+  gnews:
+    enabled: true
+    api_key: ""
+    max_articles_per_topic: 20
+
+  polygon:
+    enabled: true
+    api_key: ""
+    max_articles_per_topic: 20
+
+  social:
+    enabled: true
+    max_posts_per_topic: 50
+
+  wikipedia:
+    enabled: true
+    max_pages_per_topic: 5
+    language: "en"
+
+  reddit:
+    enabled: true
+    # No API key required — uses Reddit's public JSON API
+    user_agent: "WebMiningBot/1.0 (educational project; python-requests)"
+    max_posts_per_subreddit: 25
+    post_type: "hot"      # hot | new | top
+    subreddits:
+      "artificial intelligence":
+        - "MachineLearning"
+        - "artificial"
+        - "AIethics"
+        - "ChatGPT"
+      "technology":
+        - "technology"
+        - "gadgets"
+        - "programming"
+      "geopolitics":
+        - "geopolitics"
+        - "worldnews"
+        - "InternationalPolitics"
+      "finance":
+        - "finance"
+        - "investing"
+        - "stocks"
+        - "Economics"
+      "climate change":
+        - "climate"
+        - "environment"
+        - "ClimateActionPlan"
+        - "sustainability"
+      "space exploration":
+        - "space"
+        - "SpaceX"
+        - "nasa"
+        - "astrophysics"
+
+# ─── NLP / ML Models (CPU-optimized) ─────────────────────────
+models:
+  summarizer: "sshleifer/distilbart-cnn-12-6"      # Fast CPU summarization
+  classifier: "typeform/distilbert-base-uncased-mnli" # Zero-shot classification
+  embedder: "all-MiniLM-L6-v2"                     # 384-dim, very fast on CPU
+  rag_generator: "google/flan-t5-base"             # CPU-friendly answer generator
+
+  # Disable ML classifier (avoids 260MB model download on first run)
+  # Set to true once the model is cached in ~/.cache/huggingface/
+  use_ml_filter: false
+
+  # Summarization params
+  max_summary_length: 150
+  min_summary_length: 40
+  summary_num_beams: 2    # Beam search width (lower = faster on CPU)
+
+  # Classifier params
+  classifier_threshold: 0.55   # Min score to mark article as relevant
+
+  # Embedding params
+  embedding_batch_size: 32
+
+# ─── Storage ─────────────────────────────────────────────────
+storage:
+  postgres:
+    host: "localhost"
+    port: 5432
+    database: "webmining_db"
+    user: "postgres"
+    password: ""          # Set DB_PASSWORD in .env
+
+  faiss:
+    index_path: "data/faiss_index"
+    embedding_dim: 384    # Must match embedder output dimension
+
+# ─── Scheduler ───────────────────────────────────────────────
+scheduler:
+  ingestion_interval_hours: 0.25  # Increased frequency (every 15 mins)
+  cleanup_interval_days: 7      # Weekly cleanup of outdated articles
+  max_article_age_days: 30      # Articles older than this are marked outdated
+  embedding_update_batch_size: 100
+
+# ─── API ─────────────────────────────────────────────────────
+api:
+  host: "0.0.0.0"
+  port: 5000
+  debug: false
+  max_results: 10
+  rag_top_k: 5
+
+# ─── Logging ─────────────────────────────────────────────────
+logging:
+  level: "INFO"
+  file: "logs/pipeline.log"
+  max_bytes: 10485760   # 10 MB per log file
+  backup_count: 5
