@@ -20,7 +20,7 @@ from utils.logger import get_logger
 
 logger = get_logger(__name__)
 
-# ── Boilerplate patterns ─────────────────────────────────────────────────────
+# ── Boilerplate patterns ──
 _BOILERPLATE_PATTERNS = [
     r"subscribe (to|for) (our )?(newsletter|updates|emails?).*?(?=\n\n|\Z)",
     r"sign[ -]?up (for|to).*?(?=\n\n|\Z)",
